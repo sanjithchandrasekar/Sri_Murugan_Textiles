@@ -9,6 +9,8 @@ import PageAbout from "./pages/About.jsx";
 import PageContact from "./pages/Contact.jsx";
 import PageAuth from "./pages/Auth.jsx";
 import Preloader from "./components/Preloader.jsx";
+import muruganLogo from "./assets/murugan.png";
+import brandLogo from "./assets/logo-bg removal.png";
 import "./styles/main.css";
 
 /* ═══════════════════════════════════════════════════════════
@@ -35,24 +37,50 @@ export default function SriMuruganTextiles() {
     window.scrollTo({ top:0, behavior:"instant" });
   }, [navigateTo]);
 
-  useEffect(() => { const t = setTimeout(() => setPreGone(true), 2200); return () => clearTimeout(t); }, []);
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", fn, { passive:true });
+    let isMounted = true;
+    const img = new Image();
+    img.src = muruganLogo;
+    
+    Promise.all([
+      new Promise(resolve => {
+        if (img.complete) resolve();
+        else { img.onload = resolve; img.onerror = resolve; }
+      }),
+      new Promise(resolve => setTimeout(resolve, 2200))
+    ]).then(() => {
+      if (isMounted) setPreGone(true);
+    });
+
+    return () => { isMounted = false; };
+  }, []);
+  useEffect(() => {
+    let ticking = false;
+    const fn = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 40);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener("scroll", fn, { passive: true });
     return () => window.removeEventListener("scroll", fn);
   }, []);
   useEffect(() => {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("vis"); obs.unobserve(e.target); } });
+    }, { threshold:0.1, rootMargin:"0px 0px -50px 0px" });
+    
     const run = () => {
-      const els = document.querySelectorAll(".reveal,.reveal-l,.reveal-r,.reveal-s");
-      const obs = new IntersectionObserver(entries => {
-        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("vis"); obs.unobserve(e.target); } });
-      }, { threshold:0.1, rootMargin:"0px 0px -50px 0px" });
-      els.forEach(el => obs.observe(el));
-      return () => obs.disconnect();
+      document.querySelectorAll(".reveal:not(.vis),.reveal-l:not(.vis),.reveal-r:not(.vis),.reveal-s:not(.vis)").forEach(el => obs.observe(el));
     };
-    const t = setTimeout(run, 80);
-    return () => clearTimeout(t);
-  }, [page, preGone]);
+    
+    run();
+    const int = setInterval(run, 500);
+    return () => { clearInterval(int); obs.disconnect(); };
+  }, []);
 
 
 
@@ -98,8 +126,11 @@ export default function SriMuruganTextiles() {
       {/* NAV */}
       <nav className={`nav${scrolled?" scrolled":""}`}>
         <div className="nav-logo" onClick={() => navigate("home")}>
-          <div className="nav-logo-main">Sri&nbsp;<em>Murugan</em>&nbsp;Textiles</div>
-          <div className="nav-logo-sub">Factory Direct Sales</div>
+          <img src={brandLogo} alt="Sri Murugan Textiles Logo" className="nav-logo-img" />
+          <div className="nav-logo-text">
+            <div className="nav-logo-main">Sri&nbsp;<em>Murugan</em>&nbsp;Textiles</div>
+            <div className="nav-logo-sub">Factory Direct Sales</div>
+          </div>
         </div>
         <ul className="nav-links">
           {NAV_PAGES.map(p => (

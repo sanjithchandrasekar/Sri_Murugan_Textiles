@@ -8,7 +8,7 @@ import { PRODUCTS, STORES, CATS, TICKER_ITEMS, FILTERS, useHeroScene, ScrambleTe
 ═══════════════════════════════════════════════════════════ */
 export default function PageStores({ openWA, navigate }) {
   return (
-    <div style={{ animation:"page3dIn .8s var(--ease-out) both" }}>
+    <div style={{ animation:"page3dIn .25s var(--ease-out) both" }}>
       <div className="page-hero">
         <div className="page-hero-bg"/>
         <div className="page-hero-grid"/>

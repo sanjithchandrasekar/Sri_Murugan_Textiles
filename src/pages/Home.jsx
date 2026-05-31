@@ -18,7 +18,7 @@ export default function PageHome({ addCart, openWA, wishlists, toggleWish, navig
   })), []);
 
   return (
-    <div style={{ animation:"page3dIn .8s var(--ease-out) both" }}>
+    <div style={{ animation:"page3dIn .25s var(--ease-out) both" }}>
       {/* ── HERO with Three.js 3D scene ── */}
       <section className="hero" style={{ position:"relative", overflow:"hidden" }}>
         {/* Three.js canvas mount point */}

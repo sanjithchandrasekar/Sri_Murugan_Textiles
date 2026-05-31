@@ -15,7 +15,7 @@ export default function PageShop({ addCart, openWA, wishlists, toggleWish, navig
   }, [activeFilter]);
 
   return (
-    <div style={{ animation:"page3dIn .8s var(--ease-out) both" }}>
+    <div style={{ animation:"page3dIn .25s var(--ease-out) both" }}>
       <div className="page-hero">
         <div className="page-hero-bg"/>
         <div className="page-hero-grid"/>

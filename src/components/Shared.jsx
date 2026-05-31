@@ -29,6 +29,12 @@ export const PRODUCTS = [
   { id:7, cat:"Shirts", name:"Linen Summer Shirt", emoji:"👗", price:549, mrp:1099, rating:4.5, rev:67, badge:"50% OFF", isNew:true, tags:["shirts","casual"] },
   { id:8, cat:"Denim", name:"Regular Fit Classic Jeans", emoji:"👖", price:799, mrp:1599, rating:4.6, rev:88, badge:"50% OFF", isNew:false, tags:["jeans","denim"] },
   { id:9, cat:"Track Wear", name:"Dry-Fit Sports Shorts", emoji:"🩳", price:349, mrp:699, rating:4.7, rev:145, badge:"50% OFF", isNew:false, tags:["track","casual"] },
+  { id:10, cat:"T-Shirts", name:"Solid Color Polo T-Shirt", emoji:"👕", price:399, mrp:799, rating:4.6, rev:112, badge:"50% OFF", isNew:true, tags:["tshirts","casual"] },
+  { id:11, cat:"Ethnic Wear", name:"Men's Cotton Dhoti", emoji:"🧣", price:449, mrp:899, rating:4.8, rev:89, badge:"50% OFF", isNew:false, tags:["ethnic"] },
+  { id:12, cat:"Shirts", name:"Checkered Casual Shirt", emoji:"👔", price:599, mrp:1199, rating:4.5, rev:210, badge:"50% OFF", isNew:true, tags:["shirts","casual"] },
+  { id:13, cat:"Track Wear", name:"Printed Lounge Shorts", emoji:"🩳", price:299, mrp:599, rating:4.4, rev:65, badge:"50% OFF", isNew:false, tags:["track","casual"] },
+  { id:14, cat:"Womens Wear", name:"Premium Silk Saree", emoji:"🥻", price:1499, mrp:2999, rating:4.9, rev:342, badge:"50% OFF", isNew:true, tags:["womens","ethnic"] },
+  { id:15, cat:"Outerwear", name:"Classic Denim Jacket", emoji:"🧥", price:1299, mrp:2599, rating:4.7, rev:56, badge:"50% OFF", isNew:false, tags:["denim","outerwear"] },
 ];
 export const STORES = [
   { n:"01", name:"Sulur Branch", addr:"176, Avinashi Rd, opp. Nilgiris, Sulur, Coimbatore — 641 402", phone:"+91 99650 22228", tel:"9965022228", hrs:"9:00 AM – 9:00 PM · All Days", maps:"https://maps.google.com/?q=Sri+Murugan+Textiles+Sulur", landmark:"Opposite Nilgiris Supermarket" },
@@ -58,7 +64,7 @@ export function useHeroScene(mountRef) {
     // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(W, H);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.setClearColor(0x000000, 0);
     el.appendChild(renderer.domElement);
     renderer.domElement.style.cssText = "position:absolute;inset:0;width:100%;height:100%;pointer-events:none;";
@@ -166,8 +172,12 @@ export function useHeroScene(mountRef) {
 
     // Animate
     let raf;
+    let isVisible = true;
+    const obs = new IntersectionObserver(([e]) => { isVisible = e.isIntersecting; }, { threshold: 0 });
+    obs.observe(el);
     const animate = () => {
       raf = requestAnimationFrame(animate);
+      if (!isVisible) return;
       const t = Date.now() * 0.001;
       ring1.rotation.z = t * 0.17; ring1.rotation.y = t * 0.07;
       ring2.rotation.z = -t * 0.11; ring2.rotation.x = Math.PI * 0.44 + t * 0.055;
@@ -192,6 +202,7 @@ export function useHeroScene(mountRef) {
       cancelAnimationFrame(raf);
       window.removeEventListener("mousemove", onMouse);
       window.removeEventListener("resize", onResize);
+      obs.disconnect();
       renderer.dispose();
       if (el.contains(renderer.domElement)) el.removeChild(renderer.domElement);
     };
@@ -258,12 +269,19 @@ export function useParallax(depth = 0.15) {
   const ref = useRef(null);
   useEffect(() => {
     const el = ref.current; if (!el) return;
+    let ticking = false;
     const fn = () => {
-      const rect = el.getBoundingClientRect();
-      const center = rect.top + rect.height / 2 - window.innerHeight / 2;
-      const rotX = (-center / window.innerHeight) * 14 * depth;
-      const ty = center * depth * -0.35;
-      el.style.transform = `perspective(1200px) rotateX(${rotX}deg) translateY(${ty}px)`;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const rect = el.getBoundingClientRect();
+          const center = rect.top + rect.height / 2 - window.innerHeight / 2;
+          const rotX = (-center / window.innerHeight) * 14 * depth;
+          const ty = center * depth * -0.35;
+          el.style.transform = `perspective(1200px) rotateX(${rotX}deg) translateY(${ty}px)`;
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
     window.addEventListener("scroll", fn, { passive: true }); fn();
     return () => window.removeEventListener("scroll", fn);
@@ -274,14 +292,16 @@ export function useParallax(depth = 0.15) {
 /* ─── ANIMATION SYSTEM 1: MAGNETIC BUTTON ─── */
 export function MagButton({ children, className, onClick, strength = 0.4, style }) {
   const ref = useRef(null);
+  const rectRef = useRef(null);
+  const onEnter = useCallback(() => { if (ref.current) rectRef.current = ref.current.getBoundingClientRect(); }, []);
   const onMove = useCallback(e => {
-    const el = ref.current; if (!el) return;
-    const r = el.getBoundingClientRect();
+    const el = ref.current; if (!el || !rectRef.current) return;
+    const r = rectRef.current;
     el.style.transform = `translate(${(e.clientX-(r.left+r.width/2))*strength}px,${(e.clientY-(r.top+r.height/2))*strength}px)`;
   }, [strength]);
-  const onLeave = useCallback(() => { if (ref.current) ref.current.style.transform = "translate(0,0)"; }, []);
+  const onLeave = useCallback(() => { if (ref.current) { ref.current.style.transform = "translate(0,0)"; rectRef.current = null; } }, []);
   return (
-    <button ref={ref} className={`mag ${className}`} onMouseMove={onMove} onMouseLeave={onLeave} onClick={onClick} style={style}>
+    <button ref={ref} className={`mag ${className}`} onMouseEnter={onEnter} onMouseMove={onMove} onMouseLeave={onLeave} onClick={onClick} style={style}>
       {children}
     </button>
   );
@@ -290,9 +310,11 @@ export function MagButton({ children, className, onClick, strength = 0.4, style 
 /* ─── 3D TILT CARD ─── */
 export function TiltCard({ children, className, style }) {
   const ref = useRef(null);
+  const rectRef = useRef(null);
+  const onEnter = useCallback(() => { if (ref.current) rectRef.current = ref.current.getBoundingClientRect(); }, []);
   const onMove = useCallback(e => {
-    const el = ref.current; if (!el) return;
-    const r = el.getBoundingClientRect();
+    const el = ref.current; if (!el || !rectRef.current) return;
+    const r = rectRef.current;
     const x = (e.clientX - r.left - r.width / 2) / (r.width / 2);
     const y = (e.clientY - r.top - r.height / 2) / (r.height / 2);
     el.style.transform = `perspective(900px) rotateX(${-y * 9}deg) rotateY(${x * 9}deg) translateZ(14px)`;
@@ -302,10 +324,11 @@ export function TiltCard({ children, className, style }) {
     const el = ref.current; if (!el) return;
     el.style.transform = "perspective(900px) rotateX(0) rotateY(0) translateZ(0)";
     el.style.boxShadow = "";
+    rectRef.current = null;
   }, []);
   return (
     <div ref={ref} className={className} style={{ ...style, transition: "transform .55s cubic-bezier(0.22,1,0.36,1),box-shadow .55s" }}
-      onMouseMove={onMove} onMouseLeave={onLeave}>
+      onMouseEnter={onEnter} onMouseMove={onMove} onMouseLeave={onLeave}>
       {children}
     </div>
   );
@@ -333,8 +356,22 @@ export function AnimCounter({ target, suffix = "" }) {
 
 /* ─── SHARED: PRODUCT CARD ─── */
 export function ProductCard({ p, wishlists, toggleWish, addCart, openWA, idx }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) {
+        el.classList.add("vis");
+        obs.unobserve(el);
+      }
+    }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <div className={`reveal d${(idx % 3) + 1}`}>
+    <div ref={ref} className={`reveal d${(idx % 3) + 1}`}>
       <TiltCard className="pc">
         <div className="pc-img">
           <div className="pc-img-inner">{p.emoji}</div>

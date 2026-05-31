@@ -34,8 +34,6 @@ export default function PageShop({ addCart, openWA, wishlists, toggleWish, navig
         </div>
         {filtered.length === 0 && <div style={{ textAlign:"center", padding:"80px 0", color:"var(--gray)" }}><div style={{fontSize:"3rem",marginBottom:16}}>🧵</div><p>No products found. Try "All"!</p></div>}
       </section>
-      <WaveDivider fill="#041a10"/>
-      <WABand openWA={openWA}/>
       <WaveDivider fill="var(--b2)"/>
       <Footer navigate={navigate}/>
     </div>

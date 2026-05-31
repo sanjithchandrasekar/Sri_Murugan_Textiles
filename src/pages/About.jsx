@@ -10,7 +10,7 @@ export default function PageAbout({ navigate, openWA }) {
   const VALUES = [
     { icon:"💰", title:"Honest Pricing", front:"Real MRP vs our price, side by side. Zero fake discounts.", back:"We started this practice in 1998 and it's the foundation of every customer relationship we have." },
     { icon:"🧵", title:"Quality First", front:"Every garment quality-checked before it hits our shelves.", back:"We personally inspect fabrics for weave density, color fastness, and stitching before stocking." },
-    { icon:"🤝", title:"Community Roots", front:"A family business rooted in Coimbatore for 27 years.", back:"Thousands of families across Tamil Nadu trust us for their festive, formal, and everyday clothing." },
+    { icon:"🤝", title:"Community Roots", front:"A family business rooted in Erode for 27 years.", back:"Thousands of families across Tamil Nadu trust us for their festive, formal, and everyday clothing." },
     { icon:"🏭", title:"Direct Sourcing", front:"No distributors. No wholesalers. Factory price = your price.", back:"We negotiate directly with mills and manufacturers across Tamil Nadu and Karnataka." },
     { icon:"🔄", title:"Easy Returns", front:"7-day hassle-free exchange. If it doesn't fit, we fix it.", back:"Just bring the item back in original condition with your receipt and we'll swap it immediately." },
     { icon:"📲", title:"Modern Convenience", front:"WhatsApp ordering, digital bills, instant confirmations.", back:"Old-school trust backed by new-age tools — order in 2 minutes, pick up same day." },
@@ -27,7 +27,7 @@ export default function PageAbout({ navigate, openWA }) {
           <br/>
           <ScrambleText text="Trust." className="h1-gold" tag="span" delay={300}/>
         </h1>
-        <p>27 years of bringing factory-quality clothing to families across Coimbatore and beyond.</p>
+        <p>27 years of bringing factory-quality clothing to families across Erode and beyond.</p>
       </div>
 
       <WaveDivider fill="var(--black)"/>
@@ -43,7 +43,7 @@ export default function PageAbout({ navigate, openWA }) {
             <div className="sec-ey">Est. 1998 <span className="sec-ey-line"/></div>
             <h2 className="sec-h2">Straight From the Factory Floor</h2>
             <p>Sri Murugan Textiles was founded with one belief: <strong>great clothing shouldn't cost a fortune</strong>. We cut out every middleman between the factory and your wardrobe.</p>
-            <p>Starting as a single shop in Sulur, we've grown into two flagship showrooms along NH 47, serving tens of thousands of customers every year.</p>
+            <p>Starting as a single shop in Saralai, we've grown into two flagship showrooms along NH 47, serving tens of thousands of customers every year.</p>
             <p>Our <strong>factory-direct model</strong> means we source premium fabrics and finished garments directly from manufacturers — passing every rupee of savings to you.</p>
             <div style={{ display:"flex", gap:12, flexWrap:"wrap" }}>
               <MagButton className="btn-red" onClick={() => navigate("shop")} strength={0.4}>Shop Now <ArrowRight size={16}/></MagButton>
@@ -99,10 +99,10 @@ export default function PageAbout({ navigate, openWA }) {
         </div>
         <div className="timeline">
           {[
-            { yr:"1998", title:"Founded in Sulur", desc:"Opened our first small shop at 176 Avinashi Road, Sulur. Started with shirts and basic men's wear." },
+            { yr:"1998", title:"Founded in Saralai", desc:"Opened our first small shop at NH 47, Saralai. Started with shirts and basic men's wear." },
             { yr:"2004", title:"Factory Partnerships", desc:"Direct partnerships with textile manufacturers across Tamil Nadu, unlocking true factory-direct pricing." },
             { yr:"2011", title:"Showroom Expansion", desc:"Relocated to a larger showroom space to house our growing collection of 200+ products across all categories." },
-            { yr:"2018", title:"Kinathukadavu Opens", desc:"Opened our second branch on NH 47, near Kinathukadavu Bus Stand, serving the highway corridor." },
+            { yr:"2018", title:"Bhavani Branch Opens", desc:"Opened our second branch on NH 47, Lakshmi Nagar, Bhavani, serving the highway corridor." },
             { yr:"2022", title:"WhatsApp Commerce", desc:"Launched WhatsApp ordering. Same factory prices, delivered to your fingertips in seconds." },
             { yr:"Today", title:"Growing Every Year", desc:"Serving 10,000+ customers annually across two stores, with new styles arriving every week." },
           ].map((t,i) => (
@@ -118,8 +118,6 @@ export default function PageAbout({ navigate, openWA }) {
         </div>
       </section>
 
-      <WaveDivider fill="#041a10"/>
-      <WABand openWA={openWA}/>
       <WaveDivider fill="var(--b2)"/>
       <Footer navigate={navigate}/>
     </div>

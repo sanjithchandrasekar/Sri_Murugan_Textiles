@@ -41,7 +41,16 @@ export default function PageStores({ openWA, navigate }) {
                 <div style={{ fontSize:".68rem", fontWeight:700, letterSpacing:".16em", textTransform:"uppercase", color:"var(--red)" }}>Branch {s.n}</div>
               </div>
               <div style={{ padding:28 }}>
-                <div style={{ background:"var(--b4)", borderRadius:12, height:180, display:"flex", alignItems:"center", justifyContent:"center", fontSize:"3.5rem", marginBottom:20 }}>🗺️</div>
+                <div style={{ background:"var(--b4)", borderRadius:12, height:180, marginBottom:20, overflow:"hidden" }}>
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    frameBorder="0"
+                    style={{ border:0, filter:"invert(90%) hue-rotate(180deg) contrast(85%)", pointerEvents:"none", transform:"scale(1.2)", transformOrigin:"center" }}
+                    src={`https://maps.google.com/maps?q=${s.mapCoords}&t=&z=16&ie=UTF8&iwloc=&output=embed`}
+                    allowFullScreen
+                  />
+                </div>
                 <div style={{ fontSize:".84rem", color:"var(--gray-lt)", lineHeight:1.6, marginBottom:16 }}>{s.addr}</div>
                 <div style={{ display:"flex", gap:12 }}>
                   <MagButton className="sc-btn sc-call" style={{ flex:1 }} onClick={() => window.open(`tel:${s.tel}`)} strength={0.3}><Phone size={15}/> Call</MagButton>
@@ -54,25 +63,39 @@ export default function PageStores({ openWA, navigate }) {
       </section>
       <section className="sec sec-pt0">
         <div className="sec-hd reveal">
-          <div className="sec-ey">Common Questions <span className="sec-ey-line"/></div>
-          <h2 className="sec-h2">Store FAQ</h2>
+          <div className="sec-ey">Showcase <span className="sec-ey-line"/></div>
+          <h2 className="sec-h2">Store Galleries</h2>
         </div>
-        <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
-          {[
-            ["Do I need to book an appointment?","No! Just walk in during store hours. We always have full stock on display."],
-            ["Can I exchange if the size doesn't fit?","Absolutely. Hassle-free exchange within 7 days with proof of purchase."],
-            ["Do you offer WhatsApp ordering?","Yes! Message us on WhatsApp and we'll confirm availability and arrange same-day pickup."],
-            ["Are prices the same online and in-store?","Yes, our factory-direct pricing is the same across all channels, always."],
-          ].map(([q,a],i) => (
-            <div key={i} className={`faq-item reveal d${i+1}`}>
-              <div style={{ fontWeight:600, marginBottom:8, display:"flex", gap:10 }}><span style={{ color:"var(--red)" }}>Q</span>{q}</div>
-              <div style={{ color:"var(--gray-lt)", fontSize:".85rem", lineHeight:1.6 }}>{a}</div>
+        
+        {STORES.map((s) => {
+          const images = s.images || [];
+          return (
+            <div key={s.n} style={{ marginBottom:48 }}>
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20, paddingBottom:12, borderBottom:"1px solid var(--glass-b)" }}>
+                <div>
+                  <h3 style={{ fontSize:"1.5rem", fontFamily:"'Cormorant Garamond',serif", color:"#fff", marginBottom:4 }}>{s.name}</h3>
+                  <p style={{ color:"var(--gray-lt)", fontSize:".9rem" }}>A glimpse into our showroom and collections.</p>
+                </div>
+              </div>
+
+              {images.length === 0 ? (
+                <div style={{ textAlign:"center", padding:"40px 20px", background:"var(--b3)", borderRadius:16, border:"1px dashed var(--glass-b)" }}>
+                  <div style={{ fontSize:"2rem", marginBottom:12, opacity:0.5 }}>📸</div>
+                  <p style={{ color:"var(--gray-lt)", fontSize:".9rem" }}>Coming soon.</p>
+                </div>
+              ) : (
+                <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(200px, 1fr))", gap:20 }}>
+                  {images.map((src, idx) => (
+                    <div key={idx} style={{ aspectRatio:"1", background:"var(--b4)", borderRadius:12, overflow:"hidden", border:"1px solid var(--glass-b)" }}>
+                      <img src={src} alt={`${s.name} gallery ${idx}`} style={{ width:"100%", height:"100%", objectFit:"cover", transition:"transform .5s" }} onMouseEnter={e => e.currentTarget.style.transform="scale(1.05)"} onMouseLeave={e => e.currentTarget.style.transform="scale(1)"} />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-          ))}
-        </div>
+          );
+        })}
       </section>
-      <WaveDivider fill="#041a10"/>
-      <WABand openWA={openWA}/>
       <WaveDivider fill="var(--b2)"/>
       <Footer navigate={navigate}/>
     </div>

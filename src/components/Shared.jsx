@@ -37,8 +37,8 @@ export const PRODUCTS = [
   { id:15, cat:"Outerwear", name:"Classic Denim Jacket", emoji:"🧥", price:1299, mrp:2599, rating:4.7, rev:56, badge:"50% OFF", isNew:false, tags:["denim","outerwear"] },
 ];
 export const STORES = [
-  { n:"01", name:"Sulur Branch", addr:"176, Avinashi Rd, opp. Nilgiris, Sulur, Coimbatore — 641 402", phone:"+91 99650 22228", tel:"9965022228", hrs:"9:00 AM – 9:00 PM · All Days", maps:"https://maps.google.com/?q=Sri+Murugan+Textiles+Sulur", landmark:"Opposite Nilgiris Supermarket" },
-  { n:"02", name:"Kinathukadavu Branch", addr:"NH 47, Near Bus Stand, Kinathukadavu, Coimbatore — 641 402", phone:"+91 97887 22002", tel:"9788722002", hrs:"9:00 AM – 9:00 PM · All Days", maps:"https://maps.google.com/?q=Sri+Murugan+Textiles+Kinathukadavu", landmark:"Near Bus Stand, NH 47" },
+  { n:"01", name:"Saralai Branch", incharge:"Ragunathan V", addr:"NH 47, Covai Main Road, Bharathi School (Opp), Saralai — 638118", phone:"+91 99650 22228", tel:"9965022228", hrs:"9:00 AM – 9:00 PM · All Days", email:"saralai@srimurugantextiles.com", maps:"https://maps.app.goo.gl/KmmoCpHPWSFyejyU7", landmark:"Opposite Bharathi School", mapCoords:"11.2489516,77.5330221", images: ["https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&fit=crop&w=600&q=80", "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&w=600&q=80", "https://images.unsplash.com/photo-1555529771-835f59fc5efe?auto=format&fit=crop&w=600&q=80", "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=600&q=80"] },
+  { n:"02", name:"Bhavani Branch", incharge:"Karthi K", addr:"NH 47, Covai Main Road, Lakshmi Nagar, Bhavani — 638301", phone:"+91 97887 22002", tel:"9788722002", hrs:"9:00 AM – 9:00 PM · All Days", email:"bhavani@srimurugantextiles.com", maps:"https://maps.app.goo.gl/b1pkyb5SLfzRxzhg8", landmark:"Lakshmi Nagar, NH 47", mapCoords:"11.4282049,77.6755644", images: ["https://images.unsplash.com/photo-1581338834647-b0fb40704e21?auto=format&fit=crop&w=600&q=80", "https://images.unsplash.com/photo-1558769132-cb1fac08b432?auto=format&fit=crop&w=600&q=80", "https://images.unsplash.com/photo-1607082349566-187342175e2f?auto=format&fit=crop&w=600&q=80", "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=600&q=80"] },
 ];
 export const CATS = [
   { col:"span 5", row:"span 2", name:"Formal Shirts", label:"Best Seller", sub:"35+ styles", tag:"From ₹649", emoji:"👔", accent:"rgba(200,16,46,.15)" },
@@ -414,13 +414,18 @@ export function StoreCard({ s, i }) {
         <div className="sc-nm">{s.name}</div>
       </div>
       <div className="sc-body">
+        <div className="sd"><User size={17} className="sd-ic"/><div><div className="sd-lbl">Branch Incharge</div><div className="sd-val">{s.incharge}</div></div></div>
         <div className="sd"><MapPin size={17} className="sd-ic"/><div><div className="sd-lbl">Address</div><div className="sd-val">{s.addr}</div></div></div>
         <div className="sd"><Tag size={17} className="sd-ic"/><div><div className="sd-lbl">Landmark</div><div className="sd-val">{s.landmark}</div></div></div>
         <div className="sd"><Phone size={17} className="sd-ic"/><div><div className="sd-lbl">Phone</div><div className="sd-val">{s.phone}</div></div></div>
         <div className="sd"><Clock size={17} className="sd-ic"/><div><div className="sd-lbl">Hours</div><div className="sd-val">{s.hrs}</div></div></div>
         <div className="sc-acts">
           <MagButton className="sc-btn sc-call" onClick={() => window.open(`tel:${s.tel}`)} strength={0.3}><Phone size={15}/> Call Now</MagButton>
-          <MagButton className="sc-btn sc-dir" onClick={() => window.open(s.maps,"_blank")} strength={0.3}><MapPin size={15}/> Directions</MagButton>
+          <MagButton className="sc-btn sc-dir" onClick={() => window.open(`mailto:${s.email}`)} strength={0.3}><Mail size={15}/> Mail Branch</MagButton>
+        </div>
+        <div style={{ marginTop:16 }}>
+          <MagButton className="btn-wa-lg" onClick={() => window.open(`https://wa.me/91${s.tel}`, "_blank")} strength={0.3} style={{ width:"100%", justifyContent:"center", padding: "12px" }}>
+            <MessageCircle size={16}/> Chat in WhatsApp</MagButton>
         </div>
       </div>
     </div>

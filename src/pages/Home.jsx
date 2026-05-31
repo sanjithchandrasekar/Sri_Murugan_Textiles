@@ -153,8 +153,6 @@ export default function PageHome({ addCart, openWA, wishlists, toggleWish, navig
         </div>
       </section>
 
-      <WaveDivider fill="#041a10"/>
-      <WABand openWA={openWA}/>
       <WaveDivider fill="var(--b2)"/>
       <Footer navigate={navigate}/>
     </div>

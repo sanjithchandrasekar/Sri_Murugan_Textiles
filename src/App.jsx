@@ -8,6 +8,8 @@ import PageStores from "./pages/Stores.jsx";
 import PageAbout from "./pages/About.jsx";
 import PageContact from "./pages/Contact.jsx";
 import PageAuth from "./pages/Auth.jsx";
+import PageWishlist from "./pages/Wishlist.jsx";
+import PageCart from "./pages/Cart.jsx";
 import Preloader from "./components/Preloader.jsx";
 import muruganLogo from "./assets/murugan.png";
 import brandLogo from "./assets/logo-bg removal.png";
@@ -20,7 +22,7 @@ export default function SriMuruganTextiles() {
   const [page, setPage]             = useState("home");
   const [preGone, setPreGone]       = useState(false);
   const [scrolled, setScrolled]     = useState(false);
-  const [cart, setCart]             = useState(0);
+  const [cart, setCart]             = useState([]);
   const [wishlists, setWishlists]   = useState({});
   const [toast, setToast]           = useState(null);
   const [toastOut, setToastOut]     = useState(false);
@@ -85,7 +87,7 @@ export default function SriMuruganTextiles() {
 
 
   const addCart = useCallback(p => {
-    setCart(c => c+1);
+    setCart(c => [...c, p]);
     setToastOut(false); setToast(p);
     setTimeout(() => { setToastOut(true); setTimeout(() => setToast(null), 400); }, 3000);
   }, []);
@@ -141,10 +143,10 @@ export default function SriMuruganTextiles() {
         </ul>
         <div className="nav-actions">
           <button className="ic-btn" onClick={() => navigate("auth")}><User size={18}/></button>
-          <button className="ic-btn"><Heart size={18}/></button>
-          <MagButton className="cart-pill" onClick={() => {}} strength={0.35}>
+          <button className="ic-btn" onClick={() => navigate("wishlist")}><Heart size={18}/></button>
+          <MagButton className="cart-pill" onClick={() => navigate("cart")} strength={0.35}>
             <ShoppingCart size={17}/>Cart
-            {cart > 0 && <span className="cart-badge">{cart}</span>}
+            {cart.length > 0 && <span className="cart-badge">{cart.length}</span>}
           </MagButton>
           <button className="nav-hamburger ic-btn" onClick={() => setMobile(m => !m)}>
             {mobileMenu ? <X size={22}/> : <Menu size={22}/>}
@@ -172,6 +174,8 @@ export default function SriMuruganTextiles() {
         <Route path="/about" element={<PageAbout openWA={openWA} navigate={navigate}/>} />
         <Route path="/contact" element={<PageContact openWA={openWA} navigate={navigate}/>} />
         <Route path="/auth" element={<PageAuth navigate={navigate}/>} />
+        <Route path="/wishlist" element={<PageWishlist wishlists={wishlists} toggleWish={toggleWish} addCart={addCart} navigate={navigate} openWA={openWA} />} />
+        <Route path="/cart" element={<PageCart cart={cart} setCart={setCart} navigate={navigate} openWA={openWA} />} />
       </Routes>
 
 

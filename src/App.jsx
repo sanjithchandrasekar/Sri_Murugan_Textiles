@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import { ShoppingCart, Search, Heart, Menu, X, Home, Grid, MapPin, Info, Mail } from "lucide-react";
+import { ShoppingCart, Heart, Menu, X, Home, Grid, MapPin, Info, Mail, User } from "lucide-react";
 import { MagButton } from "./components/Shared.jsx";
 import PageHome from "./pages/Home.jsx";
 import PageShop from "./pages/Shop.jsx";
 import PageStores from "./pages/Stores.jsx";
 import PageAbout from "./pages/About.jsx";
 import PageContact from "./pages/Contact.jsx";
+import PageAuth from "./pages/Auth.jsx";
 import Preloader from "./components/Preloader.jsx";
 import "./styles/main.css";
 
@@ -108,7 +109,7 @@ export default function SriMuruganTextiles() {
           ))}
         </ul>
         <div className="nav-actions">
-          <button className="ic-btn"><Search size={18}/></button>
+          <button className="ic-btn" onClick={() => navigate("auth")}><User size={18}/></button>
           <button className="ic-btn"><Heart size={18}/></button>
           <MagButton className="cart-pill" onClick={() => {}} strength={0.35}>
             <ShoppingCart size={17}/>Cart
@@ -139,11 +140,10 @@ export default function SriMuruganTextiles() {
         <Route path="/stores" element={<PageStores openWA={openWA} navigate={navigate}/>} />
         <Route path="/about" element={<PageAbout openWA={openWA} navigate={navigate}/>} />
         <Route path="/contact" element={<PageContact openWA={openWA} navigate={navigate}/>} />
+        <Route path="/auth" element={<PageAuth navigate={navigate}/>} />
       </Routes>
 
 
-      {/* FLOAT WA */}
-      <button className="float-wa" onClick={() => openWA(null)}>💬</button>
 
       {/* MOBILE NAV BAR */}
       <nav className="mob-nav">

@@ -7,7 +7,7 @@ export default function Preloader({ preGone }) {
       <img src={muruganLogo} alt="Murugan Textiles Logo" className="pre-logo" />
       <div className="pre-brand">Sri&nbsp;<em>Murugan</em>&nbsp;Textiles</div>
       <div className="pre-bar-wrap"><div className="pre-bar" /></div>
-      <div className="pre-txt">Factory Direct Sales · Since 1998</div>
+      <div className="pre-txt">Factory Direct Sales · Since 2010</div>
     </div>
   );
 }

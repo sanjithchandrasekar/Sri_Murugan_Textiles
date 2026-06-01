@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   ShoppingCart, Search, Heart, Phone, MapPin, Star,
   MessageCircle, Truck, Shield, RefreshCw,
@@ -20,21 +21,15 @@ import '../styles/main.css';
 
 /* ─── DATA ─── */
 export const PRODUCTS = [
-  { id:1, cat:"Premium Shirts", name:"Oxford Cotton Formal Shirt", emoji:"👔", price:649, mrp:1299, rating:4.8, rev:124, badge:"50% OFF", isNew:false, tags:["shirts","formal"] },
-  { id:2, cat:"Denim Collection", name:"Slim Fit Stretch Jeans", emoji:"👖", price:899, mrp:1799, rating:4.7, rev:98, badge:"50% OFF", isNew:true, tags:["jeans","denim"] },
-  { id:3, cat:"T-Shirts", name:"Premium Round Neck T-Shirt", emoji:"👕", price:299, mrp:599, rating:4.9, rev:256, badge:"50% OFF", isNew:false, tags:["tshirts","casual"] },
-  { id:4, cat:"Track Wear", name:"Comfort Track Pants", emoji:"🩳", price:549, mrp:1099, rating:4.6, rev:78, badge:"50% OFF", isNew:true, tags:["track","casual"] },
-  { id:5, cat:"Formal Wear", name:"Slim Chino Trousers", emoji:"🧥", price:749, mrp:1499, rating:4.7, rev:103, badge:"50% OFF", isNew:false, tags:["formal","trousers"] },
-  { id:6, cat:"Innerwear", name:"Premium Stretch Brief Set", emoji:"🩲", price:399, mrp:799, rating:4.8, rev:312, badge:"50% OFF", isNew:false, tags:["innerwear"] },
-  { id:7, cat:"Shirts", name:"Linen Summer Shirt", emoji:"👗", price:549, mrp:1099, rating:4.5, rev:67, badge:"50% OFF", isNew:true, tags:["shirts","casual"] },
-  { id:8, cat:"Denim", name:"Regular Fit Classic Jeans", emoji:"👖", price:799, mrp:1599, rating:4.6, rev:88, badge:"50% OFF", isNew:false, tags:["jeans","denim"] },
-  { id:9, cat:"Track Wear", name:"Dry-Fit Sports Shorts", emoji:"🩳", price:349, mrp:699, rating:4.7, rev:145, badge:"50% OFF", isNew:false, tags:["track","casual"] },
-  { id:10, cat:"T-Shirts", name:"Solid Color Polo T-Shirt", emoji:"👕", price:399, mrp:799, rating:4.6, rev:112, badge:"50% OFF", isNew:true, tags:["tshirts","casual"] },
-  { id:11, cat:"Ethnic Wear", name:"Men's Cotton Dhoti", emoji:"🧣", price:449, mrp:899, rating:4.8, rev:89, badge:"50% OFF", isNew:false, tags:["ethnic"] },
-  { id:12, cat:"Shirts", name:"Checkered Casual Shirt", emoji:"👔", price:599, mrp:1199, rating:4.5, rev:210, badge:"50% OFF", isNew:true, tags:["shirts","casual"] },
-  { id:13, cat:"Track Wear", name:"Printed Lounge Shorts", emoji:"🩳", price:299, mrp:599, rating:4.4, rev:65, badge:"50% OFF", isNew:false, tags:["track","casual"] },
-  { id:14, cat:"Womens Wear", name:"Premium Silk Saree", emoji:"🥻", price:1499, mrp:2999, rating:4.9, rev:342, badge:"50% OFF", isNew:true, tags:["womens","ethnic"] },
-  { id:15, cat:"Outerwear", name:"Classic Denim Jacket", emoji:"🧥", price:1299, mrp:2599, rating:4.7, rev:56, badge:"50% OFF", isNew:false, tags:["denim","outerwear"] },
+  { id:16, cat:"Shirts", name:"Jibouti Strips Shirt", emoji:"👔", price:799, mrp:1599, rating:4.8, rev:32, badge:"", isNew:true, tags:["shirts","casual"], image:"/picture/Shirts/jibouti/Vertical Striped Formal/overall collection.jpeg", colors: [
+    { name: "All Colors", img: "/picture/Shirts/jibouti/Vertical Striped Formal/overall collection.jpeg" },
+    { name: "Beige, Light Brown & White", img: "/picture/Shirts/jibouti/Vertical Striped Formal/Beige  Light Brown & White Stripes.jpeg" },
+    { name: "Blue, Grey & White", img: "/picture/Shirts/jibouti/Vertical Striped Formal/Blue, Grey & White Stripes.jpeg" },
+    { name: "Light Green & White", img: "/picture/Shirts/jibouti/Vertical Striped Formal/Light Green & White Stripes.jpeg" },
+    { name: "Light Pink & White", img: "/picture/Shirts/jibouti/Vertical Striped Formal/Light Pink  & White Stripes.jpeg" },
+    { name: "Olive Green, Grey & White", img: "/picture/Shirts/jibouti/Vertical Striped Formal/Olive Green  Grey & White Stripes.jpeg" },
+    { name: "Sky Blue & White", img: "/picture/Shirts/jibouti/Vertical Striped Formal/Sky Blue & White Stripes.jpeg" }
+  ] },
 ];
 export const STORES = [
   { n:"01", name:"Saralai Branch", incharge:"Ragunathan V", addr:"NH 47, Covai Main Road, Bharathi School (Opp), Saralai — 638118", phone:"+91 99650 22228", tel:"9965022228", hrs:"9:00 AM – 9:00 PM · All Days", email:"saralai@srimurugantextiles.com", maps:"https://maps.app.goo.gl/KmmoCpHPWSFyejyU7", landmark:"Opposite Bharathi School", mapCoords:"11.2489516,77.5330221", images: ["https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&fit=crop&w=600&q=80", "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&w=600&q=80", "https://images.unsplash.com/photo-1555529771-835f59fc5efe?auto=format&fit=crop&w=600&q=80", "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=600&q=80"] },
@@ -308,7 +303,7 @@ export function MagButton({ children, className, onClick, strength = 0.4, style 
 }
 
 /* ─── 3D TILT CARD ─── */
-export function TiltCard({ children, className, style }) {
+export function TiltCard({ children, className, style, onClick }) {
   const ref = useRef(null);
   const rectRef = useRef(null);
   const onEnter = useCallback(() => { if (ref.current) rectRef.current = ref.current.getBoundingClientRect(); }, []);
@@ -317,8 +312,8 @@ export function TiltCard({ children, className, style }) {
     const r = rectRef.current;
     const x = (e.clientX - r.left - r.width / 2) / (r.width / 2);
     const y = (e.clientY - r.top - r.height / 2) / (r.height / 2);
-    el.style.transform = `perspective(900px) rotateX(${-y * 9}deg) rotateY(${x * 9}deg) translateZ(14px)`;
-    el.style.boxShadow = `${-x * 18}px ${y * 18}px 60px rgba(0,0,0,.55),0 0 0 1px rgba(200,16,46,.18),${x * 4}px ${-y * 4}px 0 rgba(200,16,46,.1)`;
+    el.style.transform = `perspective(900px) rotateX(${-y * 3}deg) rotateY(${x * 3}deg) translateZ(5px)`;
+    el.style.boxShadow = `${-x * 8}px ${y * 8}px 30px rgba(0,0,0,.15),0 0 0 1px rgba(200,16,46,.1),${x * 2}px ${-y * 2}px 0 rgba(200,16,46,.05)`;
   }, []);
   const onLeave = useCallback(() => {
     const el = ref.current; if (!el) return;
@@ -328,7 +323,7 @@ export function TiltCard({ children, className, style }) {
   }, []);
   return (
     <div ref={ref} className={className} style={{ ...style, transition: "transform .55s cubic-bezier(0.22,1,0.36,1),box-shadow .55s" }}
-      onMouseEnter={onEnter} onMouseMove={onMove} onMouseLeave={onLeave}>
+      onMouseEnter={onEnter} onMouseMove={onMove} onMouseLeave={onLeave} onClick={onClick}>
       {children}
     </div>
   );
@@ -357,6 +352,7 @@ export function AnimCounter({ target, suffix = "" }) {
 /* ─── SHARED: PRODUCT CARD ─── */
 export function ProductCard({ p, wishlists, toggleWish, addCart, openWA, idx }) {
   const ref = useRef(null);
+  const navigate = useNavigate();
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -370,34 +366,31 @@ export function ProductCard({ p, wishlists, toggleWish, addCart, openWA, idx }) 
     return () => obs.disconnect();
   }, []);
 
+  const wishKey = p.wishKey || (p.colorName ? `${p.id}-${p.colorName}` : p.id);
+
   return (
     <div ref={ref} className={`reveal d${(idx % 3) + 1}`}>
-      <TiltCard className="pc">
+      <TiltCard className="pc" style={{ cursor: "pointer" }} onClick={() => navigate(`/product/${p.id}`, { state: { colorName: p.colorName } })}>
         <div className="pc-img">
-          <div className="pc-img-inner">{p.emoji}</div>
-          <div className="pc-overlay">
-            <button className="pc-ov-btn" onClick={() => addCart(p)}><ShoppingCart size={14}/> Add</button>
-            <button className="pc-ov-btn" onClick={() => openWA(p)}><MessageCircle size={14}/> WhatsApp</button>
+          <div className="pc-img-inner">
+            {p.image ? <img src={p.image} alt={p.name} style={{width:"100%", height:"100%", objectFit:"contain", borderRadius:"inherit"}} /> : p.emoji}
           </div>
+
           <div className="pc-badges">
-            <span className="badge badge-discount">{p.badge}</span>
-            <span className="badge badge-factory">Factory Price</span>
+            <span className="badge badge-factory">Fixed Price</span>
             {p.isNew && <span className="badge badge-new">New</span>}
           </div>
-          <button className="pc-wish" onClick={() => toggleWish(p.id)}>
-            <Heart size={16} fill={wishlists[p.id] ? "#c8102e" : "none"} color={wishlists[p.id] ? "#c8102e" : "#aaa"}/>
+          <button className="pc-wish" onClick={(e) => { e.stopPropagation(); toggleWish(wishKey, p); }}>
+            <Heart size={16} fill={wishlists[wishKey] ? "#c8102e" : "none"} color={wishlists[wishKey] ? "#c8102e" : "#aaa"}/>
           </button>
         </div>
         <div className="pc-body">
           <div className="pc-cat">{p.cat}</div>
           <div className="pc-name">{p.name}</div>
-          <div className="pc-stars">
-            {[...Array(5)].map((_,j) => <Star key={j} size={13} fill={j<Math.floor(p.rating)?"#c9a84c":"none"} color="#c9a84c"/>)}
-            <span className="pc-rc">({p.rev})</span>
-          </div>
+
           <div className="pc-pr">
             <div><span className="p-cur">₹{p.price}</span><span className="p-org">₹{p.mrp}</span></div>
-            <button className="btn-sm" onClick={() => addCart(p)}>+ Cart</button>
+            <button className="btn-sm" onClick={(e) => { e.stopPropagation(); addCart(p); }}>+ Cart</button>
           </div>
         </div>
       </TiltCard>

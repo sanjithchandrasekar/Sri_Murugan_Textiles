@@ -37,7 +37,7 @@ export default function PageHome({ addCart, openWA, wishlists, toggleWish, navig
             <ScrambleText text="Fashion," className="h1-italic" tag="span" delay={280}/>
             <ScrambleText text="Half Price." className="h1-gold" tag="span" delay={480}/>
           </h1>
-          <p className="hero-sub">Sri Murugan Textiles brings you top-quality men's clothing straight from the factory floor — shirts, jeans, T-shirts, trousers and more at prices that simply can't be beaten.</p>
+          <p className="hero-sub">Sri Murugan Textiles brings you premium branded men's clothing — shirts, jeans, T-shirts, trousers and more at retail prices that simply can't be beaten.</p>
           <div className="hero-ctas">
             <MagButton className="btn-red" onClick={() => navigate("shop")} strength={0.45}>Shop Collection <ArrowRight size={16}/></MagButton>
             <MagButton className="btn-wa-pill" onClick={() => openWA(null)} strength={0.45}><MessageCircle size={16}/> WhatsApp Order</MagButton>
@@ -80,7 +80,7 @@ export default function PageHome({ addCart, openWA, wishlists, toggleWish, navig
           { icon:<Truck size={20}/>, t:"Free In-Store Pickup", d:"Order online, collect same day from either showroom." },
           { icon:<Shield size={20}/>, t:"Quality Guaranteed", d:"Every product inspected before sale, no exceptions." },
           { icon:<RefreshCw size={20}/>, t:"Easy Exchange", d:"Size not right? Swap within 7 days, hassle-free." },
-          { icon:<Zap size={20}/>, t:"Factory Prices Daily", d:"Direct sourcing means unbeatable prices every single day." },
+          { icon:<Zap size={20}/>, t:"Best Retail Prices", d:"Bringing you premium branded collections at unbeatable prices every single day." },
         ].map((f,i) => (
           <div key={i} className={`feat reveal d${i+1}`}>
             <div className="feat-icon">{f.icon}</div>
@@ -107,7 +107,7 @@ export default function PageHome({ addCart, openWA, wishlists, toggleWish, navig
         <div className="sec-hd reveal">
           <div className="sec-ey">Shop by Category <span className="sec-ey-line"/></div>
           <ScrambleText text="Every Look, Every Need" className="sec-h2" tag="h2" delay={100}/>
-          <p className="sec-sub">Six curated categories. Zero middlemen. Maximum savings.</p>
+          <p className="sec-sub">Six curated categories. Premium brands. Maximum savings.</p>
         </div>
         <div className="bento">
           {CATS.map((c,i) => (
@@ -130,9 +130,9 @@ export default function PageHome({ addCart, openWA, wishlists, toggleWish, navig
       <section className="sec sec-pt0">
         <div className="sec-hdr reveal">
           <div>
-            <div className="sec-ey">Factory Collection <span className="sec-ey-line"/></div>
+            <div className="sec-ey">Premium Collection <span className="sec-ey-line"/></div>
             <ScrambleText text="Top Picks" className="sec-h2" tag="h2" delay={120}/>
-            <p className="sec-sub">Direct-from-factory pricing. Premium quality. Everyday.</p>
+            <p className="sec-sub">Unbeatable retail pricing. Premium quality. Everyday.</p>
           </div>
           <MagButton className="view-all" onClick={() => navigate("shop")} strength={0.3}>View All <ChevronRight size={15}/></MagButton>
         </div>

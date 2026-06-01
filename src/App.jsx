@@ -10,6 +10,7 @@ import PageContact from "./pages/Contact.jsx";
 import PageAuth from "./pages/Auth.jsx";
 import PageWishlist from "./pages/Wishlist.jsx";
 import PageCart from "./pages/Cart.jsx";
+import PageProductDetail from "./pages/ProductDetail.jsx";
 import Preloader from "./components/Preloader.jsx";
 import muruganLogo from "./assets/murugan.png";
 import brandLogo from "./assets/logo-bg removal.png";
@@ -35,6 +36,7 @@ export default function SriMuruganTextiles() {
     setPage(pg);
     setMobile(false);
     if (pg === 'home') navigateTo('/');
+    else if (pg.startsWith('product/')) navigateTo('/' + pg);
     else navigateTo('/' + pg);
     window.scrollTo({ top:0, behavior:"instant" });
   }, [navigateTo]);
@@ -91,7 +93,14 @@ export default function SriMuruganTextiles() {
     setToastOut(false); setToast(p);
     setTimeout(() => { setToastOut(true); setTimeout(() => setToast(null), 400); }, 3000);
   }, []);
-  const toggleWish = useCallback(id => setWishlists(w => ({ ...w, [id]:!w[id] })), []);
+  const toggleWish = useCallback((id, customData) => setWishlists(w => {
+    if (w[id]) {
+      const next = { ...w };
+      delete next[id];
+      return next;
+    }
+    return { ...w, [id]: customData || true };
+  }), []);
   const openWA = useCallback(p => {
     const msg = p?.name?.startsWith("Hi!") ? p.name
       : p ? `Hi! I'm interested in the ${p.name} at ₹${p.price}. Please share availability and sizes.`
@@ -143,7 +152,14 @@ export default function SriMuruganTextiles() {
         </ul>
         <div className="nav-actions">
           <button className="ic-btn" onClick={() => navigate("auth")}><User size={18}/></button>
-          <button className="ic-btn" onClick={() => navigate("wishlist")}><Heart size={18}/></button>
+          <button className="ic-btn" onClick={() => navigate("wishlist")} style={{ position: "relative" }}>
+            <Heart size={18}/>
+            {Object.values(wishlists).filter(Boolean).length > 0 && (
+              <span className="cart-badge" style={{ position: "absolute", top: -4, right: -4 }}>
+                {Object.values(wishlists).filter(Boolean).length}
+              </span>
+            )}
+          </button>
           <MagButton className="cart-pill" onClick={() => navigate("cart")} strength={0.35}>
             <ShoppingCart size={17}/>Cart
             {cart.length > 0 && <span className="cart-badge">{cart.length}</span>}
@@ -176,6 +192,7 @@ export default function SriMuruganTextiles() {
         <Route path="/auth" element={<PageAuth navigate={navigate}/>} />
         <Route path="/wishlist" element={<PageWishlist wishlists={wishlists} toggleWish={toggleWish} addCart={addCart} navigate={navigate} openWA={openWA} />} />
         <Route path="/cart" element={<PageCart cart={cart} setCart={setCart} navigate={navigate} openWA={openWA} />} />
+        <Route path="/product/:id" element={<PageProductDetail addCart={addCart} openWA={openWA} wishlists={wishlists} toggleWish={toggleWish} navigate={navigate} />} />
       </Routes>
 
 

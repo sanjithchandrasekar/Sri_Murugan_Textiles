@@ -21,7 +21,7 @@ export default function PageShop({ addCart, openWA, wishlists, toggleWish, navig
         <div className="page-hero-grid"/>
         <div className="page-pill"><Package size={13}/>&nbsp; Collections</div>
         <h1><ScrambleText text="Shop All" className="h1-plain" tag="span"/>&nbsp;<ScrambleText text="Styles" className="h1-italic" tag="span" delay={200}/></h1>
-        <p>Factory-direct pricing on every item. No middlemen, no markups — ever.</p>
+        <p>Unbeatable pricing on every item. Premium quality without the premium price tag.</p>
       </div>
       <WaveDivider fill="var(--black)"/>
       <section className="sec sec-pt0">

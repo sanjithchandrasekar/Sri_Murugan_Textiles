@@ -73,7 +73,7 @@ export default function PageStores({ openWA, navigate }) {
             <div key={s.n} style={{ marginBottom:48 }}>
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20, paddingBottom:12, borderBottom:"1px solid var(--glass-b)" }}>
                 <div>
-                  <h3 style={{ fontSize:"1.5rem", fontFamily:"'Cormorant Garamond',serif", color:"#fff", marginBottom:4 }}>{s.name}</h3>
+                  <h3 style={{ fontSize:"1.5rem", fontFamily:"'Cormorant Garamond',serif", marginBottom:4 }}>{s.name}</h3>
                   <p style={{ color:"var(--gray-lt)", fontSize:".9rem" }}>A glimpse into our showroom and collections.</p>
                 </div>
               </div>

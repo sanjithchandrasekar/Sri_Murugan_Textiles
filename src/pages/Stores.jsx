@@ -31,7 +31,7 @@ export default function PageStores({ openWA, navigate }) {
           <div className="sec-ey">Map & Directions <span className="sec-ey-line"/></div>
           <h2 className="sec-h2">Get Here Easily</h2>
         </div>
-        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:20 }}>
+        <div className="stores-map-grid">
           {STORES.map((s,i) => (
             <div key={s.n} className={`reveal-${i===0?"l":"r"}`} style={{ background:"var(--b3)", border:"1px solid var(--glass-b)", borderRadius:18, overflow:"hidden", transition:"transform .5s var(--ease-out),box-shadow .5s" }}
               onMouseEnter={e => { e.currentTarget.style.transform="perspective(800px) rotateX(-4deg) rotateY(3deg) translateZ(16px)"; e.currentTarget.style.boxShadow="0 28px 60px rgba(0,0,0,.4)"; }}

@@ -22,14 +22,14 @@ button{font-family:'DM Sans',sans-serif;}
 .R::-webkit-scrollbar-thumb{background:var(--red);border-radius:10px;}
 
 /* ══ PRELOADER ══ */
-.pre{position:fixed;inset:0;z-index:9999;background:var(--black);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;transition:opacity .8s var(--ease-in),transform .9s var(--ease-in);will-change:opacity,transform;}
+.pre{position:fixed;inset:0;z-index:9999;background:#060606;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;transition:opacity .8s var(--ease-in),transform .9s var(--ease-in);will-change:opacity,transform;}
 .pre.gone{opacity:0;transform:perspective(600px) translateZ(-120px);pointer-events:none;}
-.pre-logo{width:220px;height:auto;animation:preReveal 1s var(--ease-out) both;margin-bottom:-16px;object-fit:contain;will-change:opacity,transform;}
-.pre-brand{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,4.2rem);font-weight:600;animation:preReveal 1s var(--ease-out) both;will-change:opacity,transform;}
+.pre-logo{width:220px;height:auto;animation:preReveal 1s var(--ease-out) both;margin-bottom:-16px;object-fit:contain;will-change:opacity,transform;filter:drop-shadow(0 0 10px rgba(0,0,0,0.5));}
+.pre-brand{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,4.2rem);font-weight:600;color:#fcfbf9;animation:preReveal 1s var(--ease-out) both;will-change:opacity,transform;}
 .pre-brand em{color:var(--red);font-style:italic;}
-.pre-bar-wrap{width:240px;height:2px;background:var(--glass-b);border-radius:100px;overflow:hidden;animation:preReveal 1s .3s var(--ease-out) both;will-change:opacity,transform;}
+.pre-bar-wrap{width:240px;height:2px;background:rgba(255,255,255,0.1);border-radius:100px;overflow:hidden;animation:preReveal 1s .3s var(--ease-out) both;will-change:opacity,transform;}
 .pre-bar{width:100%;height:100%;background:linear-gradient(90deg,var(--red),var(--gold));transform-origin:left;animation:preLoad 2.1s var(--ease-out) forwards;will-change:transform;}
-.pre-txt{font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gray);animation:preReveal 1s .5s var(--ease-out) both;will-change:opacity,transform;}
+.pre-txt{font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:#888888;animation:preReveal 1s .5s var(--ease-out) both;will-change:opacity,transform;}
 @keyframes preLoad{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @keyframes preReveal{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 
@@ -235,6 +235,7 @@ button{font-family:'DM Sans',sans-serif;}
 
 /* ══ 3D STORE CARDS ══ */
 .stores-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.stores-map-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
 .sc{background:var(--b2);border:1px solid var(--glass-b);border-radius:20px;overflow:hidden;transition:transform .5s var(--ease-out),box-shadow .5s,border-color .35s;}
 .sc:hover{transform:perspective(900px) translateY(-8px) translateZ(18px) rotateX(-2deg);box-shadow:0 32px 80px rgba(0,0,0,.08),0 0 0 1px rgba(200,16,46,.2),-4px 6px 0 rgba(200,16,46,.14),8px 10px 0 rgba(0,0,0,.08);}
 .sc-head{background:linear-gradient(135deg,rgba(200,16,46,.12) 0%,rgba(201,168,76,.06) 100%),rgba(0,0,0,.02);border-bottom:1px solid var(--glass-b);padding:28px 32px;position:relative;overflow:hidden;}
@@ -426,6 +427,7 @@ button{font-family:'DM Sans',sans-serif;}
   .page-hero { padding: 120px 20px 60px; }
   .features { grid-template-columns:1fr 1fr; }
   .stores-grid { grid-template-columns:1fr; }
+  .stores-map-grid { grid-template-columns:1fr; }
   .wa-band { flex-direction:column; text-align:center; padding:40px 32px; }
   .mob-nav { display:block; }
   .float-wa { bottom: 100px; }
@@ -440,6 +442,14 @@ button{font-family:'DM Sans',sans-serif;}
 }
 
 @media(max-width:540px) {
+  .nav { padding: 0 16px; }
+  .nav-logo-main { font-size: 1.1rem; }
+  .nav-actions { gap: 4px; }
+  .ic-btn { padding: 6px; }
+  .cart-pill { font-size: 0; padding: 8px 10px; gap: 0; }
+  .cart-pill svg { margin: 0; width: 18px; height: 18px; }
+  .cart-badge { font-size: 0.6rem; min-width: 16px; height: 16px; top: -6px; right: -6px; }
+  
   .hero-cards-row { grid-template-columns:1fr; }
   .features { grid-template-columns:1fr; }
   .products-grid { grid-template-columns:1fr; }

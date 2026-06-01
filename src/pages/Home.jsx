@@ -72,7 +72,7 @@ export default function PageHome({ addCart, openWA, wishlists, toggleWish, navig
           {[...TICKER_ITEMS,...TICKER_ITEMS].map((t,i) => <span key={i} className="tick-item">{t}<span className="tick-sep"/></span>)}
         </div>
       </div>
-      <WaveDivider fill="#0e0e0e" flip/>
+      <WaveDivider fill="var(--b2)" flip/>
 
       {/* Features */}
       <div className="features">

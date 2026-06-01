@@ -156,7 +156,7 @@ export default function SriMuruganTextiles() {
 
       {/* MOBILE DROPDOWN */}
       {mobileMenu && (
-        <div style={{ position:"fixed", top:76, left:0, right:0, zIndex:490, background:"rgba(14,14,14,.97)", backdropFilter:"blur(20px)", borderBottom:"1px solid var(--glass-b)", padding:"16px 24px 24px", display:"flex", flexDirection:"column", gap:4, animation:"page3dIn .4s var(--ease-out) both" }}>
+        <div style={{ position:"fixed", top:76, left:0, right:0, zIndex:490, background:"rgba(255,255,255,.97)", backdropFilter:"blur(20px)", borderBottom:"1px solid var(--glass-b)", padding:"16px 24px 24px", display:"flex", flexDirection:"column", gap:4, animation:"page3dIn .4s var(--ease-out) both" }}>
           {NAV_PAGES.map(p => (
             <button key={p.id} onClick={() => navigate(p.id)}
               style={{ background:page===p.id?"rgba(200,16,46,.12)":"none", border:"none", borderRadius:10, color:page===p.id?"var(--red)":"var(--gray-lt)", fontFamily:"'DM Sans',sans-serif", fontSize:".9rem", fontWeight:600, letterSpacing:".06em", textTransform:"uppercase", padding:"14px 16px", textAlign:"left", transition:"background .2s,color .2s" }}>

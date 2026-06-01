@@ -44,9 +44,9 @@ export const CATS = [
   { col:"span 5", row:"span 2", name:"Formal Shirts", label:"Best Seller", sub:"35+ styles", tag:"From ₹649", emoji:"👔", accent:"rgba(200,16,46,.15)" },
   { col:"span 4", name:"Jeans & Denim", label:"New Arrivals", sub:"20+ cuts", tag:"From ₹899", emoji:"👖", accent:"rgba(100,80,200,.1)" },
   { col:"span 3", name:"T-Shirts", label:"Factory Fav", sub:"50+ designs", tag:"From ₹299", emoji:"👕", accent:"rgba(201,168,76,.1)" },
-  { col:"span 3", name:"Track Pants", label:"Comfort Wear", sub:"15+ fits", tag:"From ₹549", emoji:"🩳", accent:"rgba(37,211,102,.08)" },
-  { col:"span 4", name:"Trousers", label:"Office Ready", sub:"25+ styles", tag:"From ₹749", emoji:"🧥", accent:"rgba(200,100,16,.1)" },
-  { col:"span 5", name:"Innerwear", label:"Value Pack", sub:"Brand quality", tag:"From ₹399", emoji:"🩲", accent:"rgba(200,16,46,.08)" },
+  { col:"span 4", name:"Track Pants", label:"Comfort Wear", sub:"15+ fits", tag:"From ₹549", emoji:"🩳", accent:"rgba(37,211,102,.08)" },
+  { col:"span 3", name:"Trousers", label:"Office Ready", sub:"25+ styles", tag:"From ₹749", emoji:"🧥", accent:"rgba(200,100,16,.1)" },
+  { col:"span 12", name:"Innerwear", label:"Value Pack", sub:"Brand quality", tag:"From ₹399", emoji:"🩲", accent:"rgba(200,16,46,.08)" },
 ];
 export const TICKER_ITEMS = ["Factory Direct Prices","Up to 70% Off MRP","Premium Cotton Fabrics","2 Tamil Nadu Stores","WhatsApp Orders Welcome","Same Day In-Store Pickup","Trusted Since 1998"];
 export const FILTERS = ["All","Shirts","T-Shirts","Jeans","Track Wear","Formal","Innerwear"];
@@ -79,9 +79,9 @@ export function useHeroScene(mountRef) {
     scene.add(group);
 
     // Materials
-    const mGold = new THREE.MeshStandardMaterial({ color: 0xc9a84c, metalness: 0.9, roughness: 0.12 });
+    const mGold = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.9, roughness: 0.12 });
     const mRed  = new THREE.MeshStandardMaterial({ color: 0xc8102e, metalness: 0.65, roughness: 0.28, emissive: 0x3a0008, emissiveIntensity: 0.35 });
-    const mWire = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, opacity: 0.035, transparent: true });
+    const mWire = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: true, opacity: 0.05, transparent: true });
     const mDark = new THREE.MeshStandardMaterial({ color: 0x1e0005, metalness: 0.1, roughness: 0.9 });
 
     // Rings
@@ -139,11 +139,11 @@ export function useHeroScene(mountRef) {
     }
     const pGeo = new THREE.BufferGeometry();
     pGeo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
-    const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({ color: 0xc9a84c, size: 0.045, transparent: true, opacity: 0.55 }));
+    const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({ color: 0xb8860b, size: 0.045, transparent: true, opacity: 0.8 }));
     scene.add(particles);
 
     // Lights
-    scene.add(new THREE.AmbientLight(0xffffff, 0.38));
+    scene.add(new THREE.AmbientLight(0xffffff, 1.4));
     const dLight = new THREE.DirectionalLight(0xff2244, 1.9);
     dLight.position.set(5, 6, 4);
     scene.add(dLight);
@@ -245,7 +245,7 @@ export function ScrambleText({ text, className, tag: Tag = "span", delay = 0 }) 
 }
 
 /* ─── ANIMATION SYSTEM 3: WAVE DIVIDER ─── */
-export function WaveDivider({ fill = "#0e0e0e", flip = false }) {
+export function WaveDivider({ fill = "var(--black)", flip = false }) {
   const id = useRef(`w${Math.random().toString(36).slice(2, 7)}`).current;
   return (
     <div className="wave-divider" style={{ transform: flip ? "scaleX(-1)" : "none" }}>

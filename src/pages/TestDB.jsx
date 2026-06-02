@@ -66,6 +66,27 @@ export default function TestDB({ navigate }) {
     }
   };
 
+  const seedAllCollections = async () => {
+    try {
+      setSeeding(true);
+      const res = await fetch(`${API_URL}/seed-all`, {
+        method: 'POST',
+      });
+      if (!res.ok) throw new Error('Failed to seed collections');
+      const data = await res.json();
+      if (data.success) {
+        alert(data.message);
+        fetchProducts();
+      } else {
+        throw new Error(data.error || 'Unknown error');
+      }
+    } catch (err) {
+      setError('Error seeding collections: ' + err.message);
+    } finally {
+      setSeeding(false);
+    }
+  };
+
   useEffect(() => {
     checkStatus();
     fetchProducts();

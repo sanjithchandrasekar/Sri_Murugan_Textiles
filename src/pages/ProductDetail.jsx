@@ -10,6 +10,7 @@ export default function PageProductDetail({ addCart, openWA, wishlists, toggleWi
 
   const [activeImage, setActiveImage] = useState(null);
   const [activeColorName, setActiveColorName] = useState(null);
+  const [activeSize, setActiveSize] = useState(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -31,6 +32,10 @@ export default function PageProductDetail({ addCart, openWA, wishlists, toggleWi
         setActiveImage(product.image);
         setActiveColorName(null);
       }
+
+      if (product.sizes && product.sizes.length > 0) {
+        setActiveSize(product.sizes[0]);
+      }
     }
   }, [product, id, location.state]);
 
@@ -45,11 +50,15 @@ export default function PageProductDetail({ addCart, openWA, wishlists, toggleWi
     );
   }
 
-  const selectedProduct = activeColorName && activeColorName !== "All Colors" 
-    ? { ...product, name: `${product.name} (${activeColorName})`, image: activeImage, colorName: activeColorName }
-    : product;
+  const selectedProduct = {
+    ...product,
+    name: `${product.name}${activeColorName && activeColorName !== "All Colors" ? ` (${activeColorName})` : ""}`,
+    image: activeColorName && activeColorName !== "All Colors" ? activeImage : product.image,
+    colorName: activeColorName && activeColorName !== "All Colors" ? activeColorName : null,
+    size: activeSize
+  };
 
-  const wishKey = selectedProduct.colorName ? `${product.id}-${selectedProduct.colorName}` : product.id;
+  const wishKey = `${product.id}${selectedProduct.colorName ? `-${selectedProduct.colorName}` : ''}${activeSize ? `-${activeSize}` : ''}`;
 
   return (
     <div style={{ animation: "page3dIn .3s var(--ease-out) both" }}>
@@ -125,6 +134,38 @@ export default function PageProductDetail({ addCart, openWA, wishlists, toggleWi
                       onMouseLeave={(e) => { if (activeImage !== c.img) e.currentTarget.style.borderColor = "var(--glass-b)"; }}
                     >
                       <img src={c.img} alt={c.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {product.sizes && product.sizes.length > 0 && (
+              <div style={{ marginBottom: 24 }}>
+                <div style={{ fontSize: "0.9rem", color: "var(--gray-lt)", marginBottom: 12 }}>
+                  Size: <strong style={{ color: "var(--white)", fontWeight: 600 }}>{activeSize}</strong>
+                </div>
+                <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                  {product.sizes.map((s, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setActiveSize(s)}
+                      style={{
+                        minWidth: 48,
+                        height: 48,
+                        borderRadius: 10,
+                        padding: "0 12px",
+                        border: activeSize === s ? "2px solid var(--red)" : "1px solid var(--glass-b)",
+                        background: activeSize === s ? "var(--red)" : "var(--b4)",
+                        color: activeSize === s ? "var(--white)" : "var(--gray-lt)",
+                        cursor: "pointer",
+                        fontWeight: 600,
+                        transition: "all 0.2s"
+                      }}
+                      onMouseEnter={(e) => { if (activeSize !== s) e.currentTarget.style.borderColor = "var(--gray-lt)"; }}
+                      onMouseLeave={(e) => { if (activeSize !== s) e.currentTarget.style.borderColor = "var(--glass-b)"; }}
+                    >
+                      {s}
                     </button>
                   ))}
                 </div>

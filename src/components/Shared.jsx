@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {
   ShoppingCart, Search, Heart, Phone, MapPin, Star,
   MessageCircle, Truck, Shield, RefreshCw,
-  ChevronRight, Home, Grid, User, Clock, Zap, ArrowRight,
+  ChevronRight, ChevronLeft, Home, Grid, User, Clock, Zap, ArrowRight,
   X, Menu, Package, Tag, Info, Mail, CheckCircle,
 } from "lucide-react";
 
@@ -21,7 +21,7 @@ import '../styles/main.css';
 
 /* ─── DATA ─── */
 export const PRODUCTS = [
-  { id:16, cat:"Shirts", name:"Jibouti Strips Shirt", emoji:"👔", price:799, mrp:1599, rating:4.8, rev:32, badge:"", isNew:true, tags:["shirts","casual"], image:"/picture/Shirts/jibouti/Vertical Striped Formal/overall collection.jpeg", colors: [
+  { id:16, cat:"Shirts", name:"Jibouti Strips Shirt", emoji:"👔", price:550, mrp:1998, rating:4.8, rev:32, badge:"", isNew:true, tags:["shirts","casual"], sizes:["S", "M", "L", "XL", "XXL", "XXXL"], image:"/picture/Shirts/jibouti/Vertical Striped Formal/overall collection.jpeg", colors: [
     { name: "All Colors", img: "/picture/Shirts/jibouti/Vertical Striped Formal/overall collection.jpeg" },
     { name: "Beige, Light Brown & White", img: "/picture/Shirts/jibouti/Vertical Striped Formal/Beige  Light Brown & White Stripes.jpeg" },
     { name: "Blue, Grey & White", img: "/picture/Shirts/jibouti/Vertical Striped Formal/Blue, Grey & White Stripes.jpeg" },
@@ -350,9 +350,24 @@ export function AnimCounter({ target, suffix = "" }) {
 }
 
 /* ─── SHARED: PRODUCT CARD ─── */
-export function ProductCard({ p, wishlists, toggleWish, addCart, openWA, idx }) {
+export function ProductCard({ p, wishlists, toggleWish, addCart, openWA, idx, isWishlist }) {
   const ref = useRef(null);
   const navigate = useNavigate();
+  
+  const carouselImages = (p.colors && !isWishlist)
+    ? p.colors.map(c => ({ name: c.name, img: c.img }))
+    : [{ name: p.name, img: p.image }];
+    
+  const [imgIdx, setImgIdx] = useState(0);
+
+  useEffect(() => {
+    if (carouselImages.length <= 1) return;
+    const interval = setInterval(() => {
+      setImgIdx((prev) => (prev < carouselImages.length - 1 ? prev + 1 : 0));
+    }, 2500); // Auto-slide every 2.5 seconds
+    return () => clearInterval(interval);
+  }, [carouselImages.length]);
+
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -366,21 +381,42 @@ export function ProductCard({ p, wishlists, toggleWish, addCart, openWA, idx }) 
     return () => obs.disconnect();
   }, []);
 
-  const wishKey = p.wishKey || (p.colorName ? `${p.id}-${p.colorName}` : p.id);
+  const currentImg = carouselImages[imgIdx] || { name: p.name, img: p.image };
+  const wishKey = p.wishKey || (currentImg.name !== p.name ? `${p.id}-${currentImg.name}` : p.id);
+  
+  const handlePrev = (e) => {
+    e.stopPropagation();
+    setImgIdx((prev) => (prev > 0 ? prev - 1 : carouselImages.length - 1));
+  };
+
+  const handleNext = (e) => {
+    e.stopPropagation();
+    setImgIdx((prev) => (prev < carouselImages.length - 1 ? prev + 1 : 0));
+  };
 
   return (
     <div ref={ref} className={`reveal d${(idx % 3) + 1}`}>
-      <TiltCard className="pc" style={{ cursor: "pointer" }} onClick={() => navigate(`/product/${p.id}`, { state: { colorName: p.colorName } })}>
+      <TiltCard className="pc" style={{ cursor: "pointer" }} onClick={() => navigate(`/product/${p.id}`, { state: { colorName: currentImg.name !== p.name ? currentImg.name : null } })}>
         <div className="pc-img">
-          <div className="pc-img-inner">
-            {p.image ? <img src={p.image} alt={p.name} style={{width:"100%", height:"100%", objectFit:"contain", borderRadius:"inherit"}} /> : p.emoji}
+          <div className="pc-img-inner" style={{ position: "relative" }}>
+            {currentImg.img ? <img src={currentImg.img} alt={currentImg.name} style={{width:"100%", height:"100%", objectFit:"contain", borderRadius:"inherit"}} /> : p.emoji}
+            
+            {carouselImages.length > 1 && (
+              <>
+                <div style={{ position: "absolute", bottom: 8, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 4, zIndex: 2 }}>
+                  {carouselImages.map((_, i) => (
+                    <div key={i} style={{ width: 6, height: 6, borderRadius: "50%", background: i === imgIdx ? "var(--red)" : "rgba(255,255,255,0.5)" }} />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
 
           <div className="pc-badges">
             <span className="badge badge-factory">Fixed Price</span>
             {p.isNew && <span className="badge badge-new">New</span>}
           </div>
-          <button className="pc-wish" onClick={(e) => { e.stopPropagation(); toggleWish(wishKey, p); }}>
+          <button className="pc-wish" onClick={(e) => { e.stopPropagation(); toggleWish(wishKey, { ...p, colorName: currentImg.name !== p.name ? currentImg.name : null, image: currentImg.img }); }}>
             <Heart size={16} fill={wishlists[wishKey] ? "#c8102e" : "none"} color={wishlists[wishKey] ? "#c8102e" : "#aaa"}/>
           </button>
         </div>
@@ -390,7 +426,10 @@ export function ProductCard({ p, wishlists, toggleWish, addCart, openWA, idx }) 
 
           <div className="pc-pr">
             <div><span className="p-cur">₹{p.price}</span><span className="p-org">₹{p.mrp}</span></div>
-            <button className="btn-sm" onClick={(e) => { e.stopPropagation(); addCart(p); }}>+ Cart</button>
+            <button className="btn-sm" onClick={(e) => { 
+              e.stopPropagation(); 
+              addCart({ ...p, name: currentImg.name !== p.name ? `${p.name} (${currentImg.name})` : p.name, colorName: currentImg.name !== p.name ? currentImg.name : null, image: currentImg.img, size: p.sizes ? p.sizes[0] : null }); 
+            }}>+ Cart</button>
           </div>
         </div>
       </TiltCard>

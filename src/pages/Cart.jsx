@@ -25,7 +25,7 @@ export default function PageCart({ cart, setCart, openWA, navigate }) {
     
     let msg = `Hi! I would like to order the following ${cart.length} items:\n\n`;
     cart.forEach((item, i) => {
-      msg += `${i+1}. ${item.name} - ₹${item.price}\n`;
+      msg += `${i+1}. ${item.name}${item.size ? ` (Size: ${item.size})` : ''} - ₹${item.price}\n`;
     });
     msg += `\nTotal Amount: ₹${finalPrice}\nPlease let me know the availability and payment details.`;
     
@@ -74,6 +74,7 @@ export default function PageCart({ cart, setCart, openWA, navigate }) {
                   <div style={{ flex:1 }}>
                     <div style={{ fontWeight:600, color:"var(--white)", fontSize:"1.05rem" }}>{item.name}</div>
                     <div style={{ fontSize:".8rem", color:"var(--gray-lt)", marginTop:4 }}>Category: {item.cat}</div>
+                    {item.size && <div style={{ fontSize:".8rem", color:"var(--gray-lt)", marginTop:2 }}>Size: {item.size}</div>}
                     <div style={{ marginTop:8, display:"flex", alignItems:"baseline", gap:8 }}>
                       <span style={{ color:"var(--red)", fontWeight:700 }}>₹{item.price}</span>
                       <span style={{ color:"var(--gray-lt)", textDecoration:"line-through", fontSize:".85rem", opacity:0.7 }}>₹{item.mrp}</span>
@@ -98,10 +99,6 @@ export default function PageCart({ cart, setCart, openWA, navigate }) {
                 <div style={{ display:"flex", justifyContent:"space-between", marginBottom:12, color:"var(--wa)" }}>
                   <span>Special Discount</span>
                   <span>- ₹{totalDiscount}</span>
-                </div>
-                <div style={{ display:"flex", justifyContent:"space-between", marginBottom:24, color:"var(--gray-lt)" }}>
-                  <span>Delivery Charges</span>
-                  <span style={{ color:"var(--red)" }}>Free</span>
                 </div>
                 
                 <div style={{ display:"flex", justifyContent:"space-between", padding:"20px 0", borderTop:"1px solid var(--glass-b)", borderBottom:"1px solid var(--glass-b)", marginBottom:24 }}>

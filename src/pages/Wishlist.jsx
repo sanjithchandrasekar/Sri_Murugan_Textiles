@@ -40,7 +40,7 @@ export default function PageWishlist({ wishlists, toggleWish, addCart, openWA, n
             </div>
             <div className="products-grid">
               {wishItems.map((p, i) => (
-                <ProductCard key={p.wishKey || p.id} p={p} idx={i} wishlists={wishlists} toggleWish={toggleWish} addCart={addCart} openWA={openWA} />
+                <ProductCard key={p.wishKey || p.id} p={p} idx={i} wishlists={wishlists} toggleWish={toggleWish} addCart={addCart} openWA={openWA} isWishlist={true} />
               ))}
             </div>
           </div>

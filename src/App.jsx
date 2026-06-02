@@ -11,6 +11,7 @@ import PageAuth from "./pages/Auth.jsx";
 import PageWishlist from "./pages/Wishlist.jsx";
 import PageCart from "./pages/Cart.jsx";
 import PageProductDetail from "./pages/ProductDetail.jsx";
+import PageTestDB from "./pages/TestDB.jsx";
 import Preloader from "./components/Preloader.jsx";
 import muruganLogo from "./assets/murugan.png";
 import brandLogo from "./assets/logo-bg removal.png";
@@ -81,9 +82,16 @@ export default function SriMuruganTextiles() {
       document.querySelectorAll(".reveal:not(.vis),.reveal-l:not(.vis),.reveal-r:not(.vis),.reveal-s:not(.vis)").forEach(el => obs.observe(el));
     };
     
+    let timeout;
+    const observer = new MutationObserver(() => {
+      clearTimeout(timeout);
+      timeout = setTimeout(run, 100);
+    });
+    
+    observer.observe(document.body, { childList: true, subtree: true });
     run();
-    const int = setInterval(run, 500);
-    return () => { clearInterval(int); obs.disconnect(); };
+    
+    return () => { clearTimeout(timeout); observer.disconnect(); obs.disconnect(); };
   }, []);
 
 
@@ -193,6 +201,7 @@ export default function SriMuruganTextiles() {
         <Route path="/wishlist" element={<PageWishlist wishlists={wishlists} toggleWish={toggleWish} addCart={addCart} navigate={navigate} openWA={openWA} />} />
         <Route path="/cart" element={<PageCart cart={cart} setCart={setCart} navigate={navigate} openWA={openWA} />} />
         <Route path="/product/:id" element={<PageProductDetail addCart={addCart} openWA={openWA} wishlists={wishlists} toggleWish={toggleWish} navigate={navigate} />} />
+        <Route path="/test" element={<PageTestDB navigate={navigate} />} />
       </Routes>
 
 

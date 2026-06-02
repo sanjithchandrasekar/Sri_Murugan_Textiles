@@ -93,7 +93,7 @@ export default function PageHome({ addCart, openWA, wishlists, toggleWish, navig
       <section className="sec">
         <div className="stat-row reveal">
           {[
-            { num:<AnimCounter target={27} suffix=" yrs"/>, lbl:"In Business" },
+            { num:<AnimCounter target={16} suffix=" yrs"/>, lbl:"In Business" },
             { num:<AnimCounter target={50000} suffix="+"/>, lbl:"Items Sold" },
             { num:<AnimCounter target={70} suffix="%"/>, lbl:"Max Savings" },
             { num:<AnimCounter target={2}/>, lbl:"Showrooms" },

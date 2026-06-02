@@ -43,7 +43,7 @@ export const CATS = [
   { col:"span 3", name:"Trousers", label:"Office Ready", sub:"25+ styles", tag:"From ₹749", emoji:"🧥", accent:"rgba(200,100,16,.1)" },
   { col:"span 12", name:"Innerwear", label:"Value Pack", sub:"Brand quality", tag:"From ₹399", emoji:"🩲", accent:"rgba(200,16,46,.08)" },
 ];
-export const TICKER_ITEMS = ["Factory Direct Prices","Up to 70% Off MRP","Premium Cotton Fabrics","2 Tamil Nadu Stores","WhatsApp Orders Welcome","Same Day In-Store Pickup","Trusted Since 1998"];
+export const TICKER_ITEMS = ["Factory Direct Prices","Up to 70% Off MRP","Premium Cotton Fabrics","2 Tamil Nadu Stores","WhatsApp Orders Welcome","Same Day In-Store Pickup","Trusted Since 2010"];
 export const FILTERS = ["All","Shirts","T-Shirts","Jeans","Track Wear","Formal","Innerwear"];
 
 /* ═══════════════════════════════════════════════════════════
@@ -331,7 +331,6 @@ export function TiltCard({ children, className, style, onClick }) {
 
 /* ─── ANIMATED COUNTER ─── */
 export function AnimCounter({ target, suffix = "" }) {
-  const [val, setVal] = useState(0);
   const ref = useRef(null); const started = useRef(false);
   useEffect(() => {
     const el = ref.current; if (!el) return;
@@ -339,14 +338,19 @@ export function AnimCounter({ target, suffix = "" }) {
       if (e.isIntersecting && !started.current) {
         started.current = true;
         const t0 = Date.now(), dur = 1600;
-        const step = () => { const p = Math.min((Date.now()-t0)/dur,1); setVal(Math.round((1-Math.pow(1-p,3))*target)); if(p<1) requestAnimationFrame(step); };
+        const step = () => { 
+          const p = Math.min((Date.now()-t0)/dur,1); 
+          const val = Math.round((1-Math.pow(1-p,3))*target);
+          if (el) el.textContent = val + suffix;
+          if(p<1) requestAnimationFrame(step); 
+        };
         requestAnimationFrame(step); obs.unobserve(el);
       }
     }, { threshold: 0.5 });
     obs.observe(el);
     return () => obs.disconnect();
-  }, [target]);
-  return <span ref={ref}>{val}{suffix}</span>;
+  }, [target, suffix]);
+  return <span ref={ref}>0{suffix}</span>;
 }
 
 /* ─── SHARED: PRODUCT CARD ─── */
@@ -359,14 +363,15 @@ export function ProductCard({ p, wishlists, toggleWish, addCart, openWA, idx, is
     : [{ name: p.name, img: p.image }];
     
   const [imgIdx, setImgIdx] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
-    if (carouselImages.length <= 1) return;
+    if (carouselImages.length <= 1 || !isHovered) return;
     const interval = setInterval(() => {
       setImgIdx((prev) => (prev < carouselImages.length - 1 ? prev + 1 : 0));
-    }, 2500); // Auto-slide every 2.5 seconds
+    }, 1500); // Auto-slide on hover
     return () => clearInterval(interval);
-  }, [carouselImages.length]);
+  }, [carouselImages.length, isHovered]);
 
   useEffect(() => {
     const el = ref.current;
@@ -395,7 +400,7 @@ export function ProductCard({ p, wishlists, toggleWish, addCart, openWA, idx, is
   };
 
   return (
-    <div ref={ref} className={`reveal d${(idx % 3) + 1}`}>
+    <div ref={ref} className={`reveal d${(idx % 3) + 1}`} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => { setIsHovered(false); setImgIdx(0); }}>
       <TiltCard className="pc" style={{ cursor: "pointer" }} onClick={() => navigate(`/product/${p.id}`, { state: { colorName: currentImg.name !== p.name ? currentImg.name : null } })}>
         <div className="pc-img">
           <div className="pc-img-inner" style={{ position: "relative" }}>

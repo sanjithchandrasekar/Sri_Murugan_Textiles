@@ -387,7 +387,7 @@ export function ProductCard({ p, wishlists, toggleWish, addCart, openWA, idx, is
   }, []);
 
   const currentImg = carouselImages[imgIdx] || { name: p.name, img: p.image };
-  const wishKey = p.wishKey || (currentImg.name !== p.name ? `${p.id}-${currentImg.name}` : p.id);
+  const wishKey = p.wishKey || (currentImg.name !== p.name ? `${p._id || p.id}-${currentImg.name}` : (p._id || p.id));
   
   const handlePrev = (e) => {
     e.stopPropagation();
@@ -401,7 +401,7 @@ export function ProductCard({ p, wishlists, toggleWish, addCart, openWA, idx, is
 
   return (
     <div ref={ref} className={`reveal d${(idx % 3) + 1}`} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => { setIsHovered(false); setImgIdx(0); }}>
-      <TiltCard className="pc" style={{ cursor: "pointer" }} onClick={() => navigate(`/product/${p.id}`, { state: { colorName: currentImg.name !== p.name ? currentImg.name : null } })}>
+      <TiltCard className="pc" style={{ cursor: "pointer" }} onClick={() => navigate(`/product/${p._id || p.id}`, { state: { colorName: currentImg.name !== p.name ? currentImg.name : null } })}>
         <div className="pc-img">
           <div className="pc-img-inner" style={{ position: "relative" }}>
             {currentImg.img ? <img src={currentImg.img} alt={currentImg.name} style={{width:"100%", height:"100%", objectFit:"contain", borderRadius:"inherit"}} /> : p.emoji}

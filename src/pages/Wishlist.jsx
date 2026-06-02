@@ -1,12 +1,12 @@
 import React from "react";
 import { Heart, Search, ShoppingCart, ArrowRight } from "lucide-react";
-import { PRODUCTS, ScrambleText, WaveDivider, MagButton, ProductCard, Footer, WABand } from "../components/Shared.jsx";
+import { ScrambleText, WaveDivider, MagButton, ProductCard, Footer, WABand } from "../components/Shared.jsx";
 
-export default function PageWishlist({ wishlists, toggleWish, addCart, openWA, navigate }) {
+export default function PageWishlist({ wishlists, toggleWish, addCart, navigate, openWA, products }) {
   const wishItems = Object.keys(wishlists).map(key => {
     const val = wishlists[key];
     if (typeof val === 'object') return { ...val, wishKey: key };
-    const p = PRODUCTS.find(p => p.id == key);
+    const p = products.find(p => p._id === key || p.id == key);
     return p ? { ...p, wishKey: key } : null;
   }).filter(Boolean);
 

@@ -19,6 +19,13 @@ app.get('/', (req, res) => {
   res.send('Sri Murugan Textiles API is running...');
 });
 
+// Real API Routes
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/products', require('./routes/products'));
+app.use('/api/cart', require('./routes/cart'));
+app.use('/api/wishlist', require('./routes/wishlist'));
+app.use('/api/orders', require('./routes/orders'));
+
 // Test Routes
 const Product = require('./models/Product');
 const User = require('./models/User');
@@ -71,7 +78,7 @@ app.post('/api/test/seed-all', async (req, res) => {
       name: "Test User " + Date.now(),
       email: "test" + Date.now() + "@example.com",
       password: "password123",
-      role: "customer"
+      role: "user"
     });
     await newUser.save();
 
@@ -105,14 +112,8 @@ app.post('/api/test/seed-all', async (req, res) => {
         price: newProduct.price
       }],
       totalAmount: newProduct.price,
-      shippingAddress: {
-        street: "123 Test St",
-        city: "Test City",
-        state: "Test State",
-        pincode: "123456",
-        phone: "1234567890"
-      },
-      status: "pending"
+      shippingAddress: "123 Test St, Test City, Test State, 123456",
+      status: "Pending"
     });
     await newOrder.save();
 

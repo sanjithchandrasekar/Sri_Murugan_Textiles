@@ -9,7 +9,8 @@ export default function TestDB({ navigate }) {
   const [error, setError] = useState(null);
   const [seeding, setSeeding] = useState(false);
 
-  const API_URL = 'http://localhost:5000/api/test';
+  // Use the live backend URL if in production, otherwise localhost for local testing
+  const API_URL = import.meta.env.PROD ? 'https://sri-murugan-textiles-api.onrender.com/api/test' : 'http://localhost:5000/api/test';
 
   const checkStatus = async () => {
     try {

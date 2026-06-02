@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { ShoppingCart, Trash2, ArrowRight, MessageCircle, Shield, Truck } from "lucide-react";
 import { ScrambleText, WaveDivider, MagButton, Footer, WABand } from "../components/Shared.jsx";
 
-export default function PageCart({ cart, setCart, openWA, navigate }) {
+export default function PageCart({ cart, setCart, openWA, navigate, products }) {
   const { totalMrp, totalDiscount, finalPrice } = useMemo(() => {
     let mrp = 0, price = 0;
     cart.forEach(item => {

@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, useContext } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { ShoppingCart, Heart, Menu, X, Home, Grid, MapPin, Info, Mail, User } from "lucide-react";
+import { AuthContext } from "./context/AuthContext.jsx";
 import { MagButton } from "./components/Shared.jsx";
 import PageHome from "./pages/Home.jsx";
 import PageShop from "./pages/Shop.jsx";
@@ -26,9 +27,12 @@ export default function SriMuruganTextiles() {
   const [scrolled, setScrolled]     = useState(false);
   const [cart, setCart]             = useState([]);
   const [wishlists, setWishlists]   = useState({});
+  const [products, setProducts]     = useState([]);
   const [toast, setToast]           = useState(null);
   const [toastOut, setToastOut]     = useState(false);
   const [mobileMenu, setMobile]     = useState(false);
+  
+  const { token, API_URL } = useContext(AuthContext);
 
 
 
@@ -94,21 +98,81 @@ export default function SriMuruganTextiles() {
     return () => { clearTimeout(timeout); observer.disconnect(); obs.disconnect(); };
   }, []);
 
+  useEffect(() => {
+    fetch(`${API_URL}/products`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) setProducts(data.data);
+      })
+      .catch(err => console.error("Failed to fetch products:", err));
+
+    if (token) {
+      // Fetch Wishlist
+      fetch(`${API_URL}/wishlist`, { headers: { 'x-auth-token': token }})
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            const w = {};
+            data.data.forEach(id => w[id] = true);
+            setWishlists(w);
+          }
+        });
+      // Fetch Cart
+      fetch(`${API_URL}/cart`, { headers: { 'x-auth-token': token }})
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.data.items) {
+            setCart(data.data.items.map(item => ({
+              ...item.product,
+              quantity: item.quantity,
+              cartItemId: item._id
+            })));
+          }
+        });
+    }
+  }, [token, API_URL]);
 
 
-  const addCart = useCallback(p => {
-    setCart(c => [...c, p]);
+
+  const addCart = useCallback(async p => {
+    if (!token) return alert('Please login to add items to cart!');
+    
     setToastOut(false); setToast(p);
     setTimeout(() => { setToastOut(true); setTimeout(() => setToast(null), 400); }, 3000);
-  }, []);
-  const toggleWish = useCallback((id, customData) => setWishlists(w => {
-    if (w[id]) {
-      const next = { ...w };
-      delete next[id];
-      return next;
+
+    const res = await fetch(`${API_URL}/cart/add`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-auth-token': token },
+      body: JSON.stringify({ productId: p._id || p.id, quantity: 1, price: p.price, color: p.colors?.[0]?.name, size: p.sizes?.[0] })
+    });
+    const data = await res.json();
+    if (data.success) {
+      setCart(data.data.items.map(item => ({
+        ...item.product,
+        quantity: item.quantity,
+        cartItemId: item._id
+      })));
     }
-    return { ...w, [id]: customData || true };
-  }), []);
+  }, [token, API_URL]);
+
+  const toggleWish = useCallback(async (id, customData) => {
+    if (!token) return alert('Please login to use wishlist!');
+    
+    setWishlists(w => {
+      if (w[id]) {
+        const next = { ...w };
+        delete next[id];
+        return next;
+      }
+      return { ...w, [id]: customData || true };
+    });
+
+    await fetch(`${API_URL}/wishlist/toggle`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-auth-token': token },
+      body: JSON.stringify({ productId: id })
+    });
+  }, [token, API_URL]);
   const openWA = useCallback(p => {
     const msg = p?.name?.startsWith("Hi!") ? p.name
       : p ? `Hi! I'm interested in the ${p.name} at ₹${p.price}. Please share availability and sizes.`
@@ -192,15 +256,15 @@ export default function SriMuruganTextiles() {
 
       {/* PAGE CONTENT */}
       <Routes>
-        <Route path="/" element={<PageHome addCart={addCart} openWA={openWA} wishlists={wishlists} toggleWish={toggleWish} navigate={navigate}/>} />
-        <Route path="/shop" element={<PageShop addCart={addCart} openWA={openWA} wishlists={wishlists} toggleWish={toggleWish} navigate={navigate}/>} />
-        <Route path="/stores" element={<PageStores openWA={openWA} navigate={navigate}/>} />
-        <Route path="/about" element={<PageAbout openWA={openWA} navigate={navigate}/>} />
-        <Route path="/contact" element={<PageContact openWA={openWA} navigate={navigate}/>} />
-        <Route path="/auth" element={<PageAuth navigate={navigate}/>} />
-        <Route path="/wishlist" element={<PageWishlist wishlists={wishlists} toggleWish={toggleWish} addCart={addCart} navigate={navigate} openWA={openWA} />} />
-        <Route path="/cart" element={<PageCart cart={cart} setCart={setCart} navigate={navigate} openWA={openWA} />} />
-        <Route path="/product/:id" element={<PageProductDetail addCart={addCart} openWA={openWA} wishlists={wishlists} toggleWish={toggleWish} navigate={navigate} />} />
+        <Route path="/" element={<PageHome addCart={addCart} openWA={openWA} wishlists={wishlists} toggleWish={toggleWish} navigate={navigate} products={products} />} />
+        <Route path="/shop" element={<PageShop addCart={addCart} openWA={openWA} wishlists={wishlists} toggleWish={toggleWish} navigate={navigate} products={products} />} />
+        <Route path="/stores" element={<PageStores openWA={openWA} navigate={navigate} />} />
+        <Route path="/about" element={<PageAbout openWA={openWA} navigate={navigate} />} />
+        <Route path="/contact" element={<PageContact openWA={openWA} navigate={navigate} />} />
+        <Route path="/auth" element={<PageAuth navigate={navigate} />} />
+        <Route path="/wishlist" element={<PageWishlist wishlists={wishlists} toggleWish={toggleWish} addCart={addCart} navigate={navigate} openWA={openWA} products={products} />} />
+        <Route path="/cart" element={<PageCart cart={cart} setCart={setCart} navigate={navigate} openWA={openWA} products={products} />} />
+        <Route path="/product/:id" element={<PageProductDetail addCart={addCart} openWA={openWA} wishlists={wishlists} toggleWish={toggleWish} navigate={navigate} products={products} />} />
         <Route path="/test" element={<PageTestDB navigate={navigate} />} />
       </Routes>
 

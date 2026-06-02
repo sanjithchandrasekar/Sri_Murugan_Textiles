@@ -1,12 +1,12 @@
 import React, { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import * as THREE from "three";
 import { ShoppingCart, Search, Heart, Phone, MapPin, Star, MessageCircle, Truck, Shield, RefreshCw, ChevronRight, Home, Grid, User, Clock, Zap, ArrowRight, X, Menu, Package, Tag, Info, Mail, CheckCircle } from "lucide-react";
-import { PRODUCTS, STORES, CATS, TICKER_ITEMS, FILTERS, useHeroScene, ScrambleText, WaveDivider, useParallax, MagButton, TiltCard, AnimCounter, ProductCard, StoreCard, WABand, Footer } from "../components/Shared.jsx";
+import { STORES, CATS, TICKER_ITEMS, FILTERS, useHeroScene, ScrambleText, WaveDivider, useParallax, MagButton, TiltCard, AnimCounter, ProductCard, StoreCard, WABand, Footer } from "../components/Shared.jsx";
 
 /* ═══════════════════════════════════════════════════════════
    PAGE 1 — HOME  (Three.js hero + all 4 systems)
 ═══════════════════════════════════════════════════════════ */
-export default function PageHome({ addCart, openWA, wishlists, toggleWish, navigate }) {
+export default function PageHome({ addCart, openWA, wishlists, toggleWish, navigate, products }) {
   const heroRef = useRef(null);
   useHeroScene(heroRef);
   const plxL = useParallax(0.07);
@@ -137,7 +137,7 @@ export default function PageHome({ addCart, openWA, wishlists, toggleWish, navig
           <MagButton className="view-all" onClick={() => navigate("shop")} strength={0.3}>View All <ChevronRight size={15}/></MagButton>
         </div>
         <div className="products-grid">
-          {PRODUCTS.slice(0,6).map((p,i) => <ProductCard key={p.id} p={p} idx={i} wishlists={wishlists} toggleWish={toggleWish} addCart={addCart} openWA={openWA}/>)}
+          {products.slice(0,6).map((p,i) => <ProductCard key={p._id || p.id} p={p} idx={i} wishlists={wishlists} toggleWish={toggleWish} addCart={addCart} openWA={openWA}/>)}
         </div>
       </section>
 

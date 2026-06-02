@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { ShoppingCart, MessageCircle, ArrowLeft, Star, Heart, CheckCircle, Shield, Truck } from "lucide-react";
-import { PRODUCTS, MagButton, Footer } from "../components/Shared.jsx";
+import { MagButton, Footer } from "../components/Shared.jsx";
 
-export default function PageProductDetail({ addCart, openWA, wishlists, toggleWish, navigate }) {
+export default function PageProductDetail({ addCart, openWA, wishlists, toggleWish, navigate, products }) {
   const { id } = useParams();
   const location = useLocation();
-  const product = PRODUCTS.find((p) => p.id === parseInt(id));
+  const product = products.find((p) => p._id === id || p.id === parseInt(id));
 
   const [activeImage, setActiveImage] = useState(null);
   const [activeColorName, setActiveColorName] = useState(null);
@@ -38,6 +38,14 @@ export default function PageProductDetail({ addCart, openWA, wishlists, toggleWi
       }
     }
   }, [product, id, location.state]);
+
+  if (products.length === 0) {
+    return (
+      <div style={{ padding: "120px 20px", textAlign: "center", minHeight: "60vh" }}>
+        <h2>Loading Product...</h2>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
